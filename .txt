@@ -1,0 +1,1 @@
+http://localhost/grifos/crearpedido?nuevoUsuario=Juan+Pablo&idUsuario=1&nuevoPedido=&nuevoDescuentoPedido=10&impuestoPedido=18&descuentoPedido=18&nuevoTotalPedido=&nuevoPrecioImpuesto=&nuevoPrecioNeto=
