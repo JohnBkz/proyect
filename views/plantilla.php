@@ -53,7 +53,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/core-js/2.4.1/core.js"></script>
 
     <!-- JQUERY NUMBER -->
-    <!-- <script src="views/plugins/jqueryNumber/jquerynumber.min.js"></script> -->
+   <script src="views/plugins/jqueryNumber/jquerynumber.min.js"></script> 
 
 </head>
 

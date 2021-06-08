@@ -417,7 +417,7 @@ if ($_SESSION["perfil"] == "Especial") {
                       echo ' 
                                         <div class="col-lg-3">
                                                     <div class="btn-group ">
-                                                        <button type="button" style="padding: 20px" class="btn btn-primary agregarProducto recuperarBoton" idProducto="' . $value["idarticulo"] . '">' . $value["descripcion"] . '</button>
+                                                        <button type="button" style="padding: 20px" class="btn btn-primary agregarProducto recuperarBoton2" idProducto="' . $value["idarticulo"] . '">' . $value["descripcion"] . '</button>
                                                     </div>
                                                     </div>';
 

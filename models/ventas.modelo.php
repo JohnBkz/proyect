@@ -92,7 +92,7 @@ class ModeloVentas{
 		if ($stmtt->execute()) {
 			  $maxIdVenta = $stmtt->fetch(PDO::FETCH_ASSOC)['maxi'];
 			  if($maxIdVenta==null){
-				$maxIdVenta="1";
+				$maxIdVenta=1;
 			  }else{
 				$maxIdVenta=$maxIdVenta+1; 
 			  }	

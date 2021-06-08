@@ -106,7 +106,7 @@ $(".tablaVentas tbody").on("click", "button.agregarProducto", function () {
           "</div>" +
           "</div>" +
           "<!-- Cantidad del producto -->" +
-          '<div class="col-xs-3">' +
+          '<div class="col-xs-3 ingresoCantidad">' +
           '<input type="number" class="form-control nuevaCantidadProducto" name="nuevaCantidadProducto" min="1" value="1" stock="' +
           stock +
           '" nuevoStock="' +
@@ -121,7 +121,7 @@ $(".tablaVentas tbody").on("click", "button.agregarProducto", function () {
           precio +
           '" name="nuevoPrecioProducto" value="' +
           precio +
-          '" readonly required>' +
+          '" required>' +
           "</div>" +
           "</div>" +
           "</div>"
@@ -141,8 +141,8 @@ $(".tablaVentas tbody").on("click", "button.agregarProducto", function () {
       document.getElementById("GuardarVenta").disabled = false;
       // PONER FORMATO AL PRECIO DE LOS PRODUCTOS
 
-      // $(".nuevoPrecioProducto").number(true, 2);
-
+      $(".nuevoPrecioProducto").number(true, 2);
+      
       localStorage.removeItem("quitarProducto");
     },
   });
@@ -209,7 +209,7 @@ $(".rowventas").on("click", "button.agregarProducto", function () {
           "</div>" +
           "</div>" +
           "<!-- Cantidad del producto -->" +
-          '<div class="col-xs-3">' +
+          '<div class="col-xs-3 ingresoCantidad">' +
           '<input type="number" class="form-control nuevaCantidadProducto" name="nuevaCantidadProducto" min="1" value="1" stock="' +
           stock +
           '" nuevoStock="' +
@@ -244,7 +244,7 @@ $(".rowventas").on("click", "button.agregarProducto", function () {
       document.getElementById("GuardarVenta").disabled = false;
       // PONER FORMATO AL PRECIO DE LOS PRODUCTOS
 
-      // $(".nuevoPrecioProducto").number(true, 2);
+       $(".nuevoPrecioProducto").number(true, 2);
 
       localStorage.removeItem("quitarProducto");
     },
@@ -339,7 +339,7 @@ $(".rowventas2").on("click", "button.agregarProducto", function () {
 
       // AGREGAR IMPUESTO
 
-      agregarImpuestoV();
+      agregarImpuestoV2();
 
       // AGRUPAR PRODUCTOS EN FORMATO JSON
 
@@ -347,7 +347,7 @@ $(".rowventas2").on("click", "button.agregarProducto", function () {
       document.getElementById("GuardarVenta2").disabled = false;
       // PONER FORMATO AL PRECIO DE LOS PRODUCTOS
 
-      // $(".nuevoPrecioProducto").number(true, 2);
+       $(".nuevoPrecioProducto2").number(true, 2);
 
       localStorage.removeItem("quitarProducto2");
     },
@@ -473,7 +473,7 @@ ALMACENAR EN EL LOCALSTORAGE EL ID DEL PRODUCTO A QUITAR
     $("#nuevoTotalVenta2").val(0);
     $("#totalVenta2").val(0);
     $("#nuevoTotalVenta2").attr("total", 0);
-    document.getElementById("GuardarVenta").disabled = true;
+    document.getElementById("GuardarVenta2").disabled = true;
   } else {
     // SUMAR TOTAL DE PRECIOS
 
@@ -595,6 +595,36 @@ $(".formularioVenta").on("change", "input.nuevaCantidadProducto", function () {
     return;
   }
 
+  // SUMAR TOTAL DE PRECIOS
+
+  sumarTotalPreciosV();
+
+  // AGREGAR IMPUESTO
+
+  agregarImpuestoV();
+
+  // AGRUPAR PRODUCTOS EN FORMATO JSON
+
+  listarProductosV();
+});
+
+
+
+/*=============================================
+MODIFICAR LA PRECIO
+=============================================*/
+
+$(".formularioVenta").on("change", "input.nuevoPrecioProducto", function () {
+  var cantid = $(this)
+    .parent()
+    .parent()
+    .parent()
+    .children(".ingresoCantidad")
+    .children(".nuevaCantidadProducto");
+
+  
+  var nuevcant = $(this).val() / $(this).attr("precioReal");
+  cantid.val($.number( nuevcant, 3 ));
   // SUMAR TOTAL DE PRECIOS
 
   sumarTotalPreciosV();
@@ -772,7 +802,7 @@ $("#nuevoImpuestoVenta").change(function () {
 FORMATO AL PRECIO FINAL
 =============================================*/
 
-//$("#nuevoTotalVenta").number(true, 2);
+$("#nuevoTotalVenta").number(true, 2);
 
 /*=============================================
 SELECCIONAR MÉTODO DE PAGO
@@ -1276,11 +1306,10 @@ GUARDAR VENTAAAAAA
 function addVenta() {
 
   var idUsuario = document.getElementById("idUsuario").value;
-  var productos = document.getElementById("listaProductos").value;
-  var productos = document.getElementById("listaProductos").value;
-  var productos = document.getElementById("listaProductos").value;
-  var productos = document.getElementById("listaProductos").value;
-  var productos = document.getElementById("listaProductos").value;
+  var igv = document.getElementById("nuevoPrecioImpuesto").value;
+  var subtotal = document.getElementById("nuevoPrecioNeto").value;
+  var total = document.getElementById("nuevoTotalVenta").value;
+
   var productos = document.getElementById("listaProductos").value;
 
   var parame = {
@@ -1290,10 +1319,10 @@ function addVenta() {
     "producto": productos,
     "metpago": "Efectivo",
     "codetransaccion": "",
-    "subtotal": "10",
+    "subtotal": subtotal,
     "descuento": "0",
-    "igv": "1.80",
-    "total": "11.8",
+    "igv": igv,
+    "total": total,
     "estado": "realizada"
   };
 
@@ -1312,7 +1341,8 @@ function addVenta() {
         title: "La venta no se ha ejecuta si no hay productos",
         showConfirmButton: true,
         confirmButtonText: "Cerrar"
-        })        
+        })
+              
      }
      if(respuest=="ok"){
       swal({
@@ -1320,7 +1350,8 @@ function addVenta() {
         title: "Venta Realizada",
         showConfirmButton: true,
         confirmButtonText: "Cerrar"
-        })        
+        });
+        limpiar();         
      }
 
     },
@@ -1332,10 +1363,8 @@ function addVenta() {
 
 
 
-$("#GuardarVenta").click(function () {
-  
-addcliente();
-  
+$("#GuardarVenta").click(function () { 
+addcliente(); 
 });
 /*=============================================
 REVISAR SI EL CLIENTE YA ESTÁ REGISTRADO
@@ -1666,3 +1695,34 @@ $("#GuardarCliente").click(function () {
     },
   });
 });
+
+/*=============================================
+LIMPIAR LOS CAMPOS
+=============================================*/
+
+
+function limpiar() {
+  document.getElementById("nuevoDocumento").value = "";
+  document.getElementById("clientenombre").value = "";
+  document.getElementById("domicilio").value = "";
+  document.getElementById("listaProductos").value = "[]";
+  $("#nuevoTotalVenta").val(0);
+    $("#totalVenta").val(0);
+    $("#nuevoTotalVenta").attr("total", 0);
+    document.getElementById("GuardarVenta").disabled = true;
+    //localStorage.clear();
+
+  var descrip = $(".nuevaDescripcionProducto");
+
+  for (var i = 0; i < descrip.length; i++) {
+   const idpro =  $(descrip[i]).attr("idProducto");
+    $("button.recuperarBoton[idProducto='" + idpro + "']").removeClass(
+      "btn-default"
+    );
+  
+    $("button.recuperarBoton[idProducto='" + idpro + "']").addClass(
+      "btn-primary agregarProducto"
+    );
+    }
+    $(".nuevoProducto").children('div').remove();
+}
