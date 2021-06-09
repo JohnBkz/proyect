@@ -1289,7 +1289,7 @@ if (buton==0){
    midocu = document.getElementById("nuevoDocumento").value;
    midireccion = document.getElementById("domicilio").value;
   tdocu= tipodoc;
-}{
+}else{
    minombre = document.getElementById("clientenombre2").value;
    midocu = document.getElementById("nuevoDocumento2").value;
    midireccion = document.getElementById("domicilio2").value;

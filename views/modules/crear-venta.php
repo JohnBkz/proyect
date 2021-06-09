@@ -354,15 +354,6 @@ if ($_SESSION["perfil"] == "Especial") {
                 ENTRADA DEL VENDEDOR
                 ======================================-->
 
-                <input type="hidden" class="form-control" id="nuevoVendedor2" value="<?php echo $_SESSION["nombre"]; ?>" readonly>
-
-                <input type="hidden" name="idVendedor2" value="<?php echo $_SESSION["id"]; ?>">
-
-
-
-
-
-
                 <!-- ENTRADA PARA EL DOCUMENTO ID -->
 
                 <div class="form-group" id=midocumen>
