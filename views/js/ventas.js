@@ -1160,17 +1160,11 @@ $(".daterangepicker.opensleft .ranges li").on("click", function () {
 
 // $("#seleccionarCliente").select2({ width: '100%' });
 // $("#seleccionarClienteruc").removeAttr("required");
-try {
-  var mivalor = document.getElementById("nuevaVenta").value;
-  var mivalor2 = document.getElementById("nuevaVentaFac").value;
-  document.getElementById("nuevaVentaFac").value = 0;
-  document.getElementById("idfac").style.display = "none";
 
-  //$('#ruccliente').toggle();
-} catch (e) {}
 var tipocom = 0;
-var tipodocu="";
+var tipodoc="";
 var namecompro="";
+
 $(window).ready(function () {
   $("#comprobfac").click(function () {
     if( tipocom == 0 || tipocom == 1){
@@ -1182,12 +1176,12 @@ $(window).ready(function () {
       document.getElementById("domici").style.display = "block";
       tipocom = 2;
       namecompro="Factura";
-      tipodocu = "RUC";
+      tipodoc = "RUC";
     } else if( tipocom == 2){
       document.getElementById("comprobfac").checked=false;
       tipocom = 0;
       namecompro="";
-      tipodocu="";
+      tipodoc="";
     }
     });
 });
@@ -1203,41 +1197,60 @@ $(window).ready(function () {
       document.getElementById("domici").style.display = "none";
       tipocom = 1;
       namecompro="Boleta";
-      tipodocu = "DNI";
+      tipodoc = "DNI";
    
      } else if( tipocom == 1){
         document.getElementById("comprobbol").checked=false;
         tipocom = 0;
         namecompro="";
-        tipodocu="";
+        tipodoc="";
       }
 
     });
 });
 var tipocom2 = 0;
+var tipodoc2="";
+var namecompro2="";
 $(window).ready(function () {
-  $("#comprobfac2")
-    .closest("label")
-    .click(function () {
+ $("#comprobfac2").click(function () {
+    if( tipocom2 == 0 || tipocom2 == 1){
       document.getElementById("nuevoDocumento2").value = "";
       document.getElementById("clientenombre2").value = "";
       document.getElementById("domicilio2").value = "";
+      document.getElementById("documento2").value = "RUC";
       document.getElementById("nuevoDocumento2").placeholder = "Ingrese RUC";
       document.getElementById("domici2").style.display = "block";
       tipocom2 = 2;
+      namecompro2="Factura";
+      tipodoc2 = "RUC";
+    } else if( tipocom2 == 2){
+      document.getElementById("comprobfac2").checked=false;
+      tipocom2 = 0;
+      namecompro2="";
+      tipodoc2="";
+    }
     });
 });
 
 $(window).ready(function () {
-  $("#comprobbol2")
-    .closest("label")
-    .click(function () {
+  $("#comprobbol2").click(function () {
+    if( tipocom2 == 0 || tipocom2 == 2){
       document.getElementById("nuevoDocumento2").value = "";
       document.getElementById("clientenombre2").value = "";
       document.getElementById("domicilio2").value = "";
+      document.getElementById("documento2").value = "DNI";
       document.getElementById("nuevoDocumento2").placeholder = "Ingrese DNI";
       document.getElementById("domici2").style.display = "none";
       tipocom2 = 1;
+      namecompro2="Boleta";
+      tipodoc2 = "DNI";
+   
+     } else if( tipocom2 == 1){
+        document.getElementById("comprobbol2").checked=false;
+        tipocom2 = 0;
+        namecompro2="";
+        tipodoc2="";
+      }
     });
 });
 
@@ -1264,19 +1277,29 @@ $(window).ready(function () {
 });
 
 var idcli;
-
+var buton;
+var minombre;
+var midocu;
+var midireccion; 
 function addcliente() {
   //$(".alert").remove();
-
-  var minombre = document.getElementById("clientenombre").value;
-  var midocu = document.getElementById("nuevoDocumento").value;
-  var midireccion = document.getElementById("domicilio").value;
-
+  var tdocu;
+if (buton==0){
+   minombre = document.getElementById("clientenombre").value;
+   midocu = document.getElementById("nuevoDocumento").value;
+   midireccion = document.getElementById("domicilio").value;
+  tdocu= tipodoc;
+}{
+   minombre = document.getElementById("clientenombre2").value;
+   midocu = document.getElementById("nuevoDocumento2").value;
+   midireccion = document.getElementById("domicilio2").value;
+  tdocu= tipodoc2;
+}
   var parame = {
-    tipodocu: tipodocu,
-    midocu: midocu,
-    minombre: minombre,
-    midireccion: midireccion,
+    "tipodocu": tdocu,
+    "midocu": midocu,
+    "minombre": minombre,
+    "midireccion": midireccion,
   };
 
   $.ajax({
@@ -1302,20 +1325,32 @@ function addcliente() {
 GUARDAR VENTAAAAAA
 =============================================*/
 
-
+var namecomp;
+var productos;
+var total;
+var subtotal;
+var igv;
 function addVenta() {
-
   var idUsuario = document.getElementById("idUsuario").value;
-  var igv = document.getElementById("nuevoPrecioImpuesto").value;
-  var subtotal = document.getElementById("nuevoPrecioNeto").value;
-  var total = document.getElementById("nuevoTotalVenta").value;
-
-  var productos = document.getElementById("listaProductos").value;
-
+  if (buton==0){
+   igv = document.getElementById("nuevoPrecioImpuesto").value;
+   subtotal = document.getElementById("nuevoPrecioNeto").value;
+   total = document.getElementById("nuevoTotalVenta").value;
+   productos = document.getElementById("listaProductos").value;
+  namecomp=namecompro;
+  }else{
+     igv = document.getElementById("nuevoPrecioImpuesto2").value;
+     subtotal = document.getElementById("nuevoPrecioNeto2").value;
+     total = document.getElementById("nuevoTotalVenta2").value;
+     productos = document.getElementById("listaProductos2").value;
+    namecomp=namecompro2;
+  }
+  console.log(productos);
+  console.log(buton);
   var parame = {
     "idusuario": idUsuario,
     "idcliente": idcli,
-    "comprobante": namecompro,
+    "comprobante": namecomp,
     "producto": productos,
     "metpago": "Efectivo",
     "codetransaccion": "",
@@ -1364,8 +1399,14 @@ function addVenta() {
 
 
 $("#GuardarVenta").click(function () { 
+  buton=0;
 addcliente(); 
 });
+
+$("#GuardarVenta2").click(function () { 
+  buton=1;
+  addcliente(); 
+  });
 /*=============================================
 REVISAR SI EL CLIENTE YA ESTÁ REGISTRADO
 =============================================*/
@@ -1494,10 +1535,13 @@ REVISAR SI EL CLIENTE YA ESTÁ REGISTRADO
 $("#nuevoDocumento2").change(function () {
   $(".alert").remove();
 
-  var cliente = $(this).val();
+  var documento2 = document.getElementById("nuevoDocumento2").value;
+  var nombree2 = document.getElementById("clientenombre2");
+  var direccionn2 = document.getElementById("domicilio2");
+  var cliente2 = $(this).val();
 
   var datos = new FormData();
-  datos.append("validarCliente", cliente);
+  datos.append("validarCliente", cliente2);
 
   $.ajax({
     url: "ajax/clientes.ajax.php",
@@ -1509,9 +1553,8 @@ $("#nuevoDocumento2").change(function () {
     dataType: "json",
     success: function (respuesta) {
       if (respuesta) {
-        $("#nuevoDocumento2")
-          .parent()
-          .after('<div class="alert alert-warning">existe usuario</div>');
+        nombree2.value = respuesta["razonsocial"];
+        direccionn2.value = respuesta["direccion"];
 
         // $("#nuevoDocumentoId").val("");
       } else if (!navigator.onLine) {
@@ -1702,27 +1745,54 @@ LIMPIAR LOS CAMPOS
 
 
 function limpiar() {
-  document.getElementById("nuevoDocumento").value = "";
-  document.getElementById("clientenombre").value = "";
-  document.getElementById("domicilio").value = "";
-  document.getElementById("listaProductos").value = "[]";
-  $("#nuevoTotalVenta").val(0);
-    $("#totalVenta").val(0);
-    $("#nuevoTotalVenta").attr("total", 0);
-    document.getElementById("GuardarVenta").disabled = true;
+
+  if (buton==0){
+    document.getElementById("nuevoDocumento").value = "";
+    document.getElementById("clientenombre").value = "";
+    document.getElementById("domicilio").value = "";
+    document.getElementById("listaProductos").value = "[]";
+    $("#nuevoTotalVenta").val(0);
+      $("#totalVenta").val(0);
+      $("#nuevoTotalVenta").attr("total", 0);
+      document.getElementById("GuardarVenta").disabled = true;
+      //localStorage.clear();
+  
+    var descrip = $(".nuevaDescripcionProducto");
+  
+    for (var i = 0; i < descrip.length; i++) {
+     const idpro =  $(descrip[i]).attr("idProducto");
+      $("button.recuperarBoton[idProducto='" + idpro + "']").removeClass(
+        "btn-default"
+      );
+    
+      $("button.recuperarBoton[idProducto='" + idpro + "']").addClass(
+        "btn-primary agregarProducto"
+      );
+      }
+      $(".nuevoProducto").children('div').remove();
+  }else {
+  document.getElementById("nuevoDocumento2").value = "";
+  document.getElementById("clientenombre2").value = "";
+  document.getElementById("domicilio2").value = "";
+  document.getElementById("listaProductos2").value = "[]";
+  $("#nuevoTotalVenta2").val(0);
+    $("#totalVenta2").val(0);
+    $("#nuevoTotalVenta2").attr("total", 0);
+    document.getElementById("GuardarVenta2").disabled = true;
     //localStorage.clear();
 
-  var descrip = $(".nuevaDescripcionProducto");
+  var descrip2 = $(".nuevaDescripcionProducto2");
 
-  for (var i = 0; i < descrip.length; i++) {
-   const idpro =  $(descrip[i]).attr("idProducto");
-    $("button.recuperarBoton[idProducto='" + idpro + "']").removeClass(
+  for (var i = 0; i < descrip2.length; i++) {
+   const idpro2 =  $(descrip2[i]).attr("idProducto2");
+    $("button.recuperarBoton2[idProducto='" + idpro2 + "']").removeClass(
       "btn-default"
     );
   
-    $("button.recuperarBoton[idProducto='" + idpro + "']").addClass(
+    $("button.recuperarBoton2[idProducto='" + idpro2 + "']").addClass(
       "btn-primary agregarProducto"
     );
     }
-    $(".nuevoProducto").children('div').remove();
+    $(".nuevoProducto2").children('div').remove();
+  }
 }

@@ -344,11 +344,12 @@ if ($_SESSION["perfil"] == "Especial") {
                 <div class="form-group">
 
 
-                  <label class="btn btn-default"> <input type="Radio" name="comprob2" id="comprobbol2" value="Factura" > Boleta </label>
-                  <label class="btn btn-default"> <input type="Radio" name="comprob2" id="comprobfac2" value="Boleta"> Factura</label>
+                   <input type="Radio" name="comprob2" id="comprobbol2" value="Factura" > Boleta
+                  <input type="Radio" name="comprob2" id="comprobfac2" value="Boleta"> Factura
 
                   <!-- ENTRADA PARA EL DOCUMENTO ID -->
                 </div>
+                <input type="hidden" name="documento2" id="documento2" value="">
                 <!--=====================================
                 ENTRADA DEL VENDEDOR
                 ======================================-->
@@ -561,7 +562,7 @@ if ($_SESSION["perfil"] == "Especial") {
 
             <div class="box-footer">
 
-              <button type="submit" class="btn btn-primary pull-right" id="GuardarVenta2">Guardar venta</button>
+              <button type="button" class="btn btn-primary pull-right" id="GuardarVenta2">Guardar venta</button>
 
 
             </div>
