@@ -1375,7 +1375,7 @@ function addVenta() {
         type: "error",
         title: "La venta no se ha ejecuta si no hay productos",
         showConfirmButton: true,
-        confirmButtonText: "Cerrar"
+        confirmButtonText: "Aceptar"
         })
               
      }
@@ -1384,10 +1384,20 @@ function addVenta() {
         type: "success",
         title: "Venta Realizada",
         showConfirmButton: true,
-        confirmButtonText: "Cerrar"
+        confirmButtonText: "Aceptar"
         });
         limpiar();         
      }
+     if(respuest=="errorconex"){
+      swal({
+        type: "error",
+        title: "Error Intente Denuevo",
+        showConfirmButton: true,
+        confirmButtonText: "Aceptar"
+        });
+        limpiar();         
+     }
+    
 
     },
     error: function () {

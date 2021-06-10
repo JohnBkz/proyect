@@ -86,19 +86,18 @@ class ModeloVentas
 	{
 
 		try {
-			do {
-			$stmtt = Conexion::conectar()->query("SELECT MAX( CONVERT( SUBSTRING_INDEX(codecomprobante, '$tipocomp', -1),UNSIGNED INTEGER) ) AS maxi FROM ventas WHERE comprobante = '$tipocomp'");
-			if ($stmtt->execute()) {
-				$maxIdVenta = $stmtt->fetch(PDO::FETCH_ASSOC)['maxi'];
-				if ($maxIdVenta == null) {
-					$maxIdVenta = 1;
-				} else {
-					$maxIdVenta = $maxIdVenta + 1;
-				}
-			}
-			$cod = $tipocomp . $maxIdVenta;
-			$stmt = Conexion::conectar()->prepare("INSERT INTO $tabla(idusuario,idcliente, comprobante, codecomprobante, productos, metpago, codetransaccion, subtotal, descuento,igv,total,estado) VALUES (:idusuario,:idcliente, :comprobante, '$cod', :productos, :metpago, :codetransaccion, :subtotal, :descuento,:igv,:total,:estado)");
 
+			$stmt = Conexion::conectar()->query("SELECT MAX( CONVERT( SUBSTRING_INDEX(codecomprobante, '$tipocomp', -1),UNSIGNED INTEGER) ) AS maxi FROM ventas WHERE comprobante = '$tipocomp'");
+			if ($stmt->execute()) {
+				$maxIdVenta = $stmt->fetch(PDO::FETCH_ASSOC)['maxi'];
+				if ($maxIdVenta != null) {
+					$maxIdVenta = $maxIdVenta + 1;
+				} else {
+					$maxIdVenta = 1;
+				}			
+			do {		
+			$cod = $tipocomp.$maxIdVenta;
+			$stmt = Conexion::conectar()->prepare("INSERT INTO $tabla(idusuario,idcliente, comprobante, codecomprobante, productos, metpago, codetransaccion, subtotal, descuento,igv,total,estado) VALUES (:idusuario,:idcliente, :comprobante, '$cod', :productos, :metpago, :codetransaccion, :subtotal, :descuento,:igv,:total,:estado)");
 			$stmt->bindParam(":idusuario", $datos["idusuario"], PDO::PARAM_INT);
 			$stmt->bindParam(":idcliente", $datos["idcliente"], PDO::PARAM_INT);
 			$stmt->bindParam(":comprobante", $datos["comprobante"], PDO::PARAM_STR);
@@ -111,26 +110,30 @@ class ModeloVentas
 			$stmt->bindParam(":total", $datos["total"], PDO::PARAM_STR);
 			$stmt->bindParam(":estado", $datos["estado"], PDO::PARAM_STR);
 
+	
 			if ($stmt->execute()) {
 				$msj=  "ok";
 				break;
-			} else {	
-				$stmtt = Conexion::conectar()->query("SELECT * FROM ventas ORDER BY codecomprobante DESC LIMIT 1 ");
-				if ($stmtt->execute()) {
-                    $msj= "no hay conexion";
-					break;
+			} else  {			
+                $pala=$stmt->errorInfo()[2];
+				// $esta = strpos($pala, 'entry');
+
+				 if (strpos($pala, 'Duplicate') !== false) {
+					$msj="error";
+					$maxIdVenta = $maxIdVenta + 1;
 				}else{
-					$msj= "error";
-				}
+					$msj="errorcon";
+					break;
+				}	
 			}
 		} while ($msj=="error");
-
-		return $msj;
+	}
+		return  $msj;
 
 			$stmt->close();
 			$stmt = null;
 		} catch (PDOException $e) {
-			error_log('ModeloVentas::insert()-> ' . $e);
+			return 'errorconex';
 		}
 	}
 
