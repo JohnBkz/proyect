@@ -1394,8 +1394,7 @@ function addVenta() {
         title: "Error Intente Denuevo",
         showConfirmButton: true,
         confirmButtonText: "Aceptar"
-        });
-        limpiar();         
+        });       
      }
     
 
