@@ -2,12 +2,13 @@
 
     <section class="content-header">
         <h1>
-            Usuarios
-            <small>Administrar usuarios</small>
+            Trabajadores
+            <small>Administrar trabajadores</small>
         </h1>
         <ol class="breadcrumb">
             <li><a href="inicio"><i class="fa fa-dashboard"></i> Inicio</a></li>
-            <li class="active">Tablero</li>
+            <li><a href="empresas"><i class="fa fa-building-o"></i> Empresas</a></li>
+            <li class="active">Trabajadores</li>
         </ol>
 
     </section>
@@ -16,68 +17,42 @@
     <section class="content">
         <div class="box ml-4">
             <div class="box-header mb-3">
-                <button class="btn btn-primary" data-toggle="modal" data-target="#agregarUsuario">
-                    Agregar usuario
-                </button>
+                <button class="btn btn-primary" data-toggle="modal" data-target="#agregarTrabajador">Agregar
+                    trabajador</button>
+                <button class="btn btn-success"><i class="fa fa-cloud-upload" aria-hidden="true"></i> Importar</button>
             </div>
             <div class="box-body">
                 <table id="User" class="table table dt-responsive" width="100%">
                     <thead>
                         <tr>
                             <th style="width:10px;">DNI</th>
-                            <th>Horario</th>
-                            <th>Usuario</th>
                             <th>Nombres</th>
                             <th>Apellidos</th>
-                            <th>Foto</th>
-                            <th>Perfil</th>
-                            <th>Estado</th>
+                            <th>Empresa</th>
                             <th>Acciones</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <?php
-                        $item = null;
-                        $valor = null;
-                        $usuarios = UsuarioController::MostrarUsuarios($item, $valor);
-
-                        foreach ($usuarios as $key => $value) {
-                            echo '
-                            <tr>
-                                <td>' . $value["idusuario"] . '</td>
-                                <td>' . $value["nombrehorario"] . '</td>
-                                <td>' . $value["user"] . '</td>
-                                <td>' . $value["nombres"] . '</td>
-                                <td>' . $value["apellidos"] . '</td>
-                            ';
-
-                            if ($value["foto"] != "") {
-                                echo '<td><img src="' . $value["foto"] . '" class="img-thumbnail" width="40px"></td>';
-                            } else {
-                                echo '<td><img src="views/img/usuarios/default/anonymous.png" class="img-thumbnail" width="40px"></td>';
-                            }
-                            echo '
-                                <td>' . $value["description"] . '</td>';
-                            if ($value["estado"] == 0) {
-
-                                echo '<td><button class="btn btn-success btn-xs btnActivar act"  idUsuario="' . $value["idusuario"] . '" estadoUsuario="1" data-toggle="tooltip" data-placement="top" title="click para activar">Activado</button></td>';
-                                //     <button type="button" class="btn btn-secondary" data-bs-toggle="tooltip" data-bs-placement="top" title="Tooltip on top">
-                                //     Tooltip on top
-                                //   </button>
-                            } else {
-
-                                echo '<td><button class="btn btn-danger btn-xs btnActivar desc" idUsuario="' . $value["idusuario"] . '" estadoUsuario="0" data-bs-toggle="tooltip" data-bs-placement="top" title="Click para desactivar">Desactivado</button></td>';
-                            }
-
-                            echo '<td>
-                                    <button class="btn btn-warning EditarUsuario" data-toggle="modal" data-target="#EditarUsuario" idusuario="' . $value["idusuario"] . '"><i class="fa fa-pencil text-white"></i></button>
-
-                                    <button class="btn btn-danger EliminarUsuario" data-toggle="modal" aria-hidden="true" idusuario="' . $value["idusuario"] . '"  fotoUsuario="' . $value["foto"] . '" usuario="' . $value["user"] . '" ><i class="fa fa-times"></i></button>
-                                </td>
-                            </tr>';
-                        }
-                        ?>
-                    </tbody>
+                    <!-- <tbody> -->
+                    <?php
+                    $item = null;
+                    $valor = null;
+                    $trabajador = trabajadorController::mostrarTrabajador($item, $valor);
+                    foreach ($trabajador as $key => $value) {
+                        echo '
+                        <tr>
+                            <td>' . $value["dnitrabajador"] . '</td>
+                            <td>' . $value["nombres"] . '</td>
+                            <td>' . $value["apellidos"] . '</td>
+                            <td>' . $value["empresa"] . '</td>                            
+                        ';
+                        echo '<td>
+                                <button class="btn btn-warning EditarTrabajador" data-toggle="modal" data-target="#EditarTrabajador" idtrabajador="' . $value["dnitrabajador"] . '" idtraba="' . $value["idtrabajador"] . '"><i class="fa fa-pencil text-white"></i></button>
+                                <button class="btn btn-danger EliminarTrabajador" data-toggle="modal" aria-hidden="true" idtrabajador="' . $value["idtrabajador"] . '"   ><i class="fa fa-times"></i></button>
+                            </td>
+                        </tr>';
+                    }
+                    ?>
+                    <!-- </tbody> -->
                 </table>
             </div>
             <!-- /.box-body -->
@@ -90,16 +65,16 @@
 <!-- /.content-wrapper -->
 
 <!--=====================================
-MODAL AGREGAR USUARIO
+MODAL AGREGAR TRABAJADOR
 ======================================-->
-<div id="agregarUsuario" class="modal fade" role="dialog">
+<div id="agregarTrabajador" class="modal fade" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">
             <form role="form" method="post" enctype="multipart/form-data">
                 <!--== CABEZA DEL MODAL ==-->
                 <div class="modal-header" style="background:#3c8dbc; color:white">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">Agregar usuario</h4>
+                    <button type="button" class="close closeB" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Agregar trabajador</h4>
                 </div>
 
                 <!--=====================================
@@ -107,81 +82,50 @@ MODAL AGREGAR USUARIO
                 ======================================-->
                 <div class="modal-body">
                     <div class="box-body">
+                        <input type="hidden" id="empresaHidden" name="empresaHidden">
 
-                        <!-- ENTRADA PARA EL DNI -->
+                        <!-- ENTRADA PARA LA EMPRESA -->
                         <div class="form-group">
                             <div class="input-group">
-                                <span class="input-group-addon"><i class="fa fa-address-card"
+                                <span class="input-group-addon"><i class="fa fa-building-o"
                                         aria-hidden="true"></i></span>
-                                <input type="text" class="form-control input-lg dni" name="iduser" id="iduser"
-                                    placeholder="Ingresar DNI" required>
-                            </div>
-                        </div>
-                        <!-- ENTRADA PARA EL USUARIO -->
-                        <div class="form-group">
-                            <div class="input-group">
-                                <span class="input-group-addon"><i class="fa fa-key"></i></span>
-                                <input type="text" class="form-control input-lg usuario" name="usuario"
-                                    placeholder="Ingresar usuario" id="nuevoUsuario" required>
-                            </div>
-                        </div>
-                        <!-- ENTRADA PARA LA CONTRASEÑA -->
-                        <div class="form-group">
-                            <div class="input-group">
-                                <span class="input-group-addon"><i class="fa fa-lock"></i></span>
-                                <input type="password" class="form-control input-lg" name="password"
-                                    placeholder="Ingresar contraseña" required>
-                            </div>
-                        </div>
-                        <!-- ENTRADA PARA EL NOMBRE -->
-                        <div class="form-group">
-                            <div class="input-group">
-                                <span class="input-group-addon"><i class="fa fa-user"></i></span>
-                                <input type="text" class="form-control input-lg" name="nombres"
-                                    placeholder="Ingresar nombre" required>
-                            </div>
-                        </div>
-                        <!-- ENTRADA PARA EL APELLIDO -->
-                        <div class="form-group">
-                            <div class="input-group">
-                                <span class="input-group-addon"><i class="fa fa-user-o" aria-hidden="true"></i></span>
-                                <input type="text" class="form-control input-lg" name="apellidos"
-                                    placeholder="Ingresar apellido" required>
-                            </div>
-                        </div>
-                        <!-- ENTRADA PARA SELECCIONAR SU PERFIL -->
-                        <div class="form-group">
-                            <div class="input-group">
-                                <span class="input-group-addon"><i class="fa fa-users"></i></span>
-                                <select class="form-control input-lg" name="perfil">
-                                    <option value="" selected disabled>Selecionar perfil</option>
+                                <select class="form-control input-lg" name="empresaT" id="selecA">
+                                    <option disabled selected id="traAgre" value="0">Seleccionar empresa</option>
                                     <?php
-                                    $perfiles = UsuarioController::showPerfiles();
-                                    foreach ($perfiles as $perfil) {
-                                        echo '<option value="' . $perfil['idperfil'] . '">' . $perfil['description'] . '</option>';
+                                    $item = null;
+                                    $valor = null;
+                                    $empresa = empresaController::mostrarEmpresa($item, $valor);
+                                    foreach ($empresa as $key => $value) {
+                                        echo '<option value="' . $value["rucempresa"] . '" id="agregarE"> ' . $value["nombre"] . '</option>';
                                     }
                                     ?>
                                 </select>
                             </div>
                         </div>
-                        <!-- ENTRADA PARA SELECCIONAR SU HORARIO -->
+                        <!-- DNI TRABAJADOR -->
                         <div class="form-group">
                             <div class="input-group">
-                                <span class="input-group-addon"><i class="fa fa-users"></i></span>
-                                <select class="form-control input-lg" name="horario">
-                                    <option value="" selected disabled>Selecionar Horario</option>
-                                    <option value="1">12 Horas</option>
-                                    <option value="2">8 Horas</option>
-                                    <option value="3">4 Horas</option>
-                                </select>
+                                <span class="input-group-addon"><i class="fa fa-id-card-o"
+                                        aria-hidden="true"></i></span>
+                                <input type="text" class="form-control input-lg dniTrabajador" name="dniTrabajador"
+                                    id="dniTrabajadorC" placeholder="Ingresar DNI">
                             </div>
                         </div>
-                        <!-- ENTRADA PARA SUBIR FOTO -->
+                        <!-- ENTRADA PARA EL NOMBRE -->
                         <div class="form-group">
-                            <div class="panel">SUBIR FOTO</div>
-                            <input type="file" class="foto" name="foto">
-                            <img src="views/img/usuarios/default/anonymous.png" class="img-thumbnail previsualizar"
-                                width="100px">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="fa fa-key"></i></span>
+                                <input type="text" class="form-control input-lg usuario" name="nombreTra" id="nombreTra"
+                                    placeholder="Ingresar nombre" required>
+                            </div>
+                        </div>
+                        <!-- ENTRADA PARA APELLIDO -->
+                        <div class="form-group">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="fa fa-user" aria-hidden="true"></i></span>
+                                <input type="text" class="form-control input-lg" name="apellidoTra" id="apellidoTra"
+                                    placeholder="Ingresar apellido">
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -191,13 +135,12 @@ MODAL AGREGAR USUARIO
                 ======================================-->
 
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Salir</button>
-                    <button type="submit" class="btn btn-primary">Guardar usuario</button>
+                    <button type="button" class="btn btn-default pull-left closeB" data-dismiss="modal">Salir</button>
+                    <button type="submit" class="btn btn-primary">Guardar trabajador</button>
                 </div>
-
                 <?php
-                $crearUsuario = new UsuarioController();
-                $crearUsuario->createUsuario();
+                $crearTrabajador = new trabajadorController();
+                $crearTrabajador->crearTrabajador();
                 ?>
             </form>
         </div>
@@ -205,9 +148,9 @@ MODAL AGREGAR USUARIO
 </div>
 
 <!--=====================================
-MODAL EDITAR USUARIO
+MODAL EDITAR TRABAJADOR
 ======================================-->
-<div id="EditarUsuario" class="modal fade" role="dialog">
+<div id="EditarTrabajador" class="modal fade" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">
             <form role="form" method="post" enctype="multipart/form-data">
@@ -216,7 +159,7 @@ MODAL EDITAR USUARIO
                 ======================================-->
                 <div class="modal-header" style="background:#3c8dbc; color:white">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">Editar usuario</h4>
+                    <h4 class="modal-title">Editar trabajador</h4>
                 </div>
                 <!--=====================================
                 CUERPO DEL MODAL
@@ -224,80 +167,52 @@ MODAL EDITAR USUARIO
                 <div class="modal-body">
                     <div class="box-body">
 
-                        <!-- ENTRADA PARA EL DNI -->
+                        <!-- ENTRADA PARA LA EMPRESA -->
                         <div class="form-group">
                             <div class="input-group">
-                                <span class="input-group-addon"><i class="fa fa-address-card"
+                                <span class="input-group-addon"><i class="fa fa-building-o"
                                         aria-hidden="true"></i></span>
-                                <input type="text" class="form-control input-lg iduser" name="Eiduser" id="Eiduser"
-                                    readonly>
+                                <select class="form-control input-lg" name="empresaTE">
+                                    <option disabled selected id="empresaTE"></option>
+                                </select>
                             </div>
                         </div>
-                        <!-- ENTRADA PARA EL USUARIO -->
+                        <!-- DNI TRABAJADOR -->
                         <div class="form-group">
                             <div class="input-group">
-                                <span class="input-group-addon"><i class="fa fa-key"></i></span>
-                                <input type="text" class="form-control input-lg" name="Eusuario" id="Eusuario" readonly>
+                                <span class="input-group-addon"><i class="fa fa-id-card-o"
+                                        aria-hidden="true"></i></span>
+                                <input type="text" class="form-control input-lg" name="dniTrabajadorE"
+                                    id="dniTrabajadorE">
                             </div>
                         </div>
-                        <!-- ENTRADA PARA LA CONTRASEÑA -->
-                        <div class="form-group">
-                            <div class="input-group">
-                                <span class="input-group-addon"><i class="fa fa-lock"></i></span>
-                                <input type="password" class="form-control input-lg" name="Epassword" id="Epassword">
-                                <input type="hidden" id="passwordActual" name="passwordActual">
-                            </div>
-                        </div>
+                        <!-- ID TRABAJADOR -->
+                        <input type="hidden" name="idTrabajdorE" id="idTrabajdorE">
                         <!-- ENTRADA PARA EL NOMBRE -->
                         <div class="form-group">
                             <div class="input-group">
-                                <span class="input-group-addon"><i class="fa fa-user"></i></span>
-                                <input type="text" class="form-control input-lg" name="Enombres" id="Enombres">
+                                <span class="input-group-addon"><i class="fa fa-key"></i></span>
+                                <input type="text" class="form-control input-lg usuario" name="nombreTraE"
+                                    id="nombreTraE" required>
                             </div>
                         </div>
-                        <!-- ENTRADA PARA EL APELLIDO -->
+                        <!-- ENTRADA PARA APELLIDO -->
                         <div class="form-group">
                             <div class="input-group">
-                                <span class="input-group-addon"><i class="fa fa-user-o" aria-hidden="true"></i></span>
-                                <input type="text" class="form-control input-lg" name="Eapellidos" id="Eapellidos">
+                                <span class="input-group-addon"><i class="fa fa-user" aria-hidden="true"></i></span>
+                                <input type="text" class="form-control input-lg" name="apellidoTraE" id="apellidoTraE">
                             </div>
-                        </div>
-                        <!-- ENTRADA PARA SELECCIONAR SU HORARIO -->
-                        <div class="form-group">
-                            <div class="input-group">
-                                <span class="input-group-addon"><i class="fa fa-users"></i></span>
-                                <select class="form-control input-lg" name="Ehorario">
-                                    <option id="horario" class="horario" selected></option>
-                                </select>
-                            </div>
-                        </div>
-                        <!-- ENTRADA PARA SELECCIONAR SU PERFIL -->
-                        <div class="form-group">
-                            <div class="input-group">
-                                <span class="input-group-addon"><i class="fa fa-users"></i></span>
-                                <select class="form-control input-lg" name="Eperfil">
-                                    <option id="perfil" class="perfil" selected></option>
-                                </select>
-                            </div>
-                        </div>
-                        <!-- ENTRADA PARA SUBIR FOTO -->
-                        <div class="form-group">
-                            <div class="panel">SUBIR FOTO</div>
-                            <input type="file" id="Efoto" name="Efoto" calss="foto">
-                            <input type="hidden" name="fotoActual" id="fotoActual">
-                            <img src="views/img/usuarios/default/anonymous.png"
-                                class="img-thumbnail previsualizar Eprevisualizar" width="100px">
                         </div>
                     </div>
                 </div>
                 <!-- footer -->
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Salir</button>
-                    <button type="submit" class="btn btn-primary">Modificar usuario</button>
+                    <button type="submit" class="btn btn-primary">Modificar trabajador</button>
                 </div>
                 <?php
-                $editarUsuario = new UsuarioController();
-                $editarUsuario->editUsuario();
+                $editarTrabajador = new trabajadorController();
+                $editarTrabajador->editarTrabajador();
                 ?>
             </form>
         </div>
@@ -305,6 +220,6 @@ MODAL EDITAR USUARIO
 </div>
 
 <?php
-$borrarUsuario = new UsuarioController();
-$borrarUsuario->deleteUsuario();
+$borrarTrabajador = new trabajadorController();
+$borrarTrabajador->deleteTrabajador();
 ?>

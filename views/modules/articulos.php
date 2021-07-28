@@ -46,7 +46,7 @@
                                 <td>' .  $value["idarticulo"]  . '</td>        
                                 <td>' . $value["descripcion"] . '</td>
                                 <td>' . $value["unidad"] . '</td>
-                                <td>' . $value["tipoArt"] . '</td>
+                                <td>' . $value["tipo"] . '</td>
                                 <td>' . $value["cantidad"] . '</td>
                                 <td>' . $value["precioventa"] . '</td>
                                 <td>' . $value["valorventa"] . '</td>
@@ -205,18 +205,21 @@
                                 <span class="input-group-addon"><i class="fa fa-th" aria-hidden="true"></i></span>
                                 <select class="form-control input-lg" name="categoria">
                                     <option id="idtipo" selected></option>
+                                    <?php
+                                    $item = null;
+                                    $valor = null;
+                                    $categorias = ControladorCategorias::ctrMostrarCategorias($item, $valor);
+                                    foreach ($categorias as $key => $value) {
+                                        echo '<option value="' . $value["idtipo"] . '">' . $value["descripcion"] . '</option>';
+                                    }
+                                    ?>
                                 </select>
                             </div>
                         </div>
 
-                        <!-- ENTRADA PARA ID -->
-                        <div class="form-group">
-                            <div class="input-group">
-                                <span class="input-group-addon"><i class="fa fa-code" aria-hidden="true"></i></span>
-                                <input type="text" class="form-control input-lg" name="EidArticulo" id="idArticulo">
-                            </div>
-                        </div>
-
+  
+                                <input type="hidden" class="form-control input-lg" name="EidArticulo" id="idArticulo">
+                  
                         <!-- ENTRADA PARA LA DESCRIPSION -->
                         <div class="form-group">
                             <div class="input-group">

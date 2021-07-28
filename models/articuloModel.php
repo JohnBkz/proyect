@@ -40,24 +40,15 @@ class ModeloArticulos {
 
 	// MOSTRAR ARTICULOS
 	static public function mdlMostrarAticulo($tabla, $item, $valor) {
-		if($item != null){
-
-			$stmt = Conexion::conectar()->prepare("SELECT * FROM $tabla WHERE $item = :$item");
-
-			$stmt -> bindParam(":".$item, $valor, PDO::PARAM_STR);
-
-			$stmt -> execute();
-
-			return $stmt -> fetchAll();
-
-		}else{
-
-			$stmt = Conexion::conectar()->prepare("SELECT * FROM $tabla ORDER BY idarticulo DESC");
-
-			$stmt -> execute();
-
-			return $stmt -> fetchAll();
-
+		if ($item != null) {
+			$stmt = Conexion::conectar()->prepare("SELECT $tabla.idarticulo, $tabla.idtipo, $tabla.precioventa, $tabla.valorventa, $tabla.descripcion, $tabla.unidad, $tabla.cantidad, $tabla.estado, tipoarticulo.idtipo, tipoarticulo.descripcion AS tipo FROM $tabla INNER JOIN tipoarticulo ON $tabla.idtipo = tipoarticulo.idtipo WHERE $tabla.$item  = :$item");
+			$stmt->bindParam(":" . $item, $valor, PDO::PARAM_STR);
+			$stmt->execute();
+			return $stmt->fetchAll();
+		} else {
+			$stmt = Conexion::conectar()->prepare("SELECT $tabla.idarticulo, $tabla.idtipo, $tabla.precioventa, $tabla.valorventa, $tabla.descripcion, $tabla.unidad, $tabla.cantidad, $tabla.estado, tipoarticulo.idtipo, tipoarticulo.descripcion AS tipo FROM $tabla INNER JOIN tipoarticulo ON $tabla.idtipo = tipoarticulo.idtipo ORDER BY $tabla.idarticulo DESC");
+			$stmt->execute();
+			return $stmt->fetchAll();
 		}
 
 		$stmt -> close();
@@ -80,19 +71,22 @@ class ModeloArticulos {
 		$stmt = null;
 	}
 
-	// static public function mdlActualizarArticulo($tabla, $item1, $valor1, $item2, $valor2) {
-	// 	$stmt = Conexion::conectar()->prepare("UPDATE $tabla SET $item1 = :$item1 WHERE $item2 = :$item2");
-	// 	$stmt -> bindParam(":".$item1, $valor1, PDO::PARAM_INT);
-	// 	$stmt -> bindParam(":".$item2, $valor2, PDO::PARAM_STR);
+	static public function mdlActualizarStock($tabla, $item1, $valor1, $valor){
+		
+		$stmt = Conexion::conectar()->prepare("UPDATE $tabla SET $item1 = :$item1 WHERE id = :id");
 
-	// 	if ($stmt->execute()) {
-	// 		return "ok";
-	// 	} else {
-	// 		return "error";		
-	// 	}
+		$stmt -> bindParam(":".$item1, $valor1, PDO::PARAM_STR);
+		$stmt -> bindParam(":id", $valor, PDO::PARAM_STR);
 
-	// 	$stmt = null;
-	// }
+
+		if ($stmt->execute()) {
+			return "ok";
+		} else {
+			return "error";		
+		}
+
+		$stmt = null;
+	}
 
 	//EDITAR ARTICULO
 	static public function mdlEditarArticulo($tabla, $datos) {

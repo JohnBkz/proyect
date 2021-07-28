@@ -53,6 +53,7 @@ class ControladorProductos{
 
 		$respuesta = ModeloProductos::mdlMostrarProductos($tabla, $item, $valor);
 
+
 		return $respuesta;
 	
 	}

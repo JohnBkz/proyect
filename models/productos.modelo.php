@@ -113,16 +113,12 @@ class ModeloProductos{
 
 			return "ok";
 		
-		}else{
-
+	}else{
 			return "error";	
-
 		}
-
 		$stmt -> close();
 
 		$stmt = null;
-
 	}
 
 	/*=============================================
@@ -179,14 +175,10 @@ class ModeloProductos{
 			$stmt -> execute();
 
 			return $stmt -> fetchAll();
-
 		}
-
 		$stmt -> close();
 
 		$stmt = null;
-
-
 	}
 
 	static public function mdlMostrarProductosRe($tabla, $item, $valor, $orden){

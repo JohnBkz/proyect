@@ -19,7 +19,8 @@ class UsuarioController {
 						$_SESSION["nombre"] = $respuesta["nombres"];
 						$_SESSION["usuario"] = $respuesta["user"];
 						$_SESSION["foto"] = $respuesta["foto"];
-
+						$_SESSION["perfi"] = $respuesta["description"];
+	
 						if ($respuesta['idperfil'] == 02) {
 							$_SESSION['perfil'] = 'grifero';
 							$iduser = $respuesta['idusuario'];
@@ -41,7 +42,7 @@ class UsuarioController {
 								<div class="alert alert-danger">Error al abrir la caja</div>';
 							}
 						} else {
-							$_SESSION['perfil'] = 'admin';
+							//$_SESSION['perfil'] = 'admin';
 							echo '<script>
 								setTimeout(() => {
 									window.location = "inicio";

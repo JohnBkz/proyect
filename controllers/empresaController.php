@@ -68,4 +68,28 @@ class empresaController
             }
         }
     }
+
+      static public function deleteEmpresa()
+    {
+        if (isset($_GET["empresa"])) {
+            $datos = $_GET["empresa"];
+            $respuesta = modeloEmpresa::deleteEmpresaModel($datos);
+            if ($respuesta == "ok") {
+                echo '<script>
+					swal({
+						type: "success",
+						title: "La empresa ha sido borrada correctamente",
+						showConfirmButton: true,
+						confirmButtonText: "Cerrar",
+						closeOnConfirm: false
+					}).then(function(result) {
+						if (result.value) {
+							window.location = "empresas";
+						}
+					})
+				</script>';
+            }
+        }
+    }
+
 }

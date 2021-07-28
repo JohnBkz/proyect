@@ -46,10 +46,9 @@ class VentasController {
                 for ($i = 0; $i < $idproduct; $i++) {
                     #$total = $_REQUEST['precioventa'][$i] * $_REQUEST['amount'][$i];
                     $detalle = $detalle . "(" . $resMaxIdVenta . "," . $_REQUEST['idproducto'][$i] . "," . $_REQUEST['amount'][$i] . "," . $_REQUEST['precioventa'][$i] . "," . $_REQUEST['precioventa'][$i] * $_REQUEST['amount'][$i] . "),";
+                    $detalle = rtrim($detalle, ',');
+                    $resDetalle = VentasModel::insertDetalleVenta($detalle);
                 }
-
-                $detalle = rtrim($detalle, ',');
-                $resDetalle = VentasModel::insertDetalleVenta($detalle);
 
             }
 

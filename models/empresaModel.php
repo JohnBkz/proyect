@@ -56,4 +56,17 @@ class modeloEmpresa
         }
         $stmt = null;
     }
+
+    static public function deleteEmpresaModel($datos)
+    {
+        $stmt = Conexion::conectar()->prepare("DELETE FROM empresas WHERE rucempresa = :rucempresa");
+        $stmt->bindParam(":rucempresa", $datos, PDO::PARAM_STR);
+        if ($stmt->execute()) {
+            return "ok";
+        } else {
+            return "error";
+        }
+        $stmt = null;
+    }
+
 }

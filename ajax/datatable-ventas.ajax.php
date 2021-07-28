@@ -17,7 +17,7 @@ class TablaProductosVentas{
 
   		$productos = ControladorArticulos::ctrMostrarArticulo($item, $valor);
 		//  $articulos = ControladorArticulos::ctrMostrar($item, $valor);
-		
+		if(count($productos)>0){
   		$datosJson = '{
 		  "data": [';
 
@@ -68,7 +68,9 @@ class TablaProductosVentas{
 		 }';
 		
 		echo $datosJson;
-
+	}else{
+		echo '{"data": []}';
+	}
 
 	}
 

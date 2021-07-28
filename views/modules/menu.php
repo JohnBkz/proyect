@@ -60,6 +60,37 @@
                     <span>Caja</span>
                 </a>
             </li>
+
+            <li class="treeview">
+                <a href="#">
+                    <i class="fa fa-list-ul"></i>
+                    <span>Contratos</span>
+                    <span class="pull-right-container">
+                        <i class="fa fa-angle-left pull-right"></i>
+                    </span>
+                </a>
+                <ul class="treeview-menu">
+                    <li>
+                        <a href="contratos">
+                            <i class="fa fa-circle-o"></i>
+                            <span>Contratos</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="crear-contrato">
+                            <i class="fa fa-circle-o"></i>
+                            <span>Crear Contratos</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="reportescontrato">
+                            <i class="fa fa-circle-o"></i>
+                            <span>Reportes</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+
             <li class="treeview">
                 <a href="#">
                     <i class="fa fa-list-ul"></i>
@@ -147,6 +178,7 @@
                     </li>
                 </ul>
             </li>
+            
             <li>
                 <a href="salir">
                     <i class="fa fa-sign-out" aria-hidden="true"></i>

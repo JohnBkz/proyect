@@ -18,6 +18,9 @@ require_once "controllers/ventas.controlador.php";
 require_once "controllers/productos.controlador.php";
 require_once "controllers/clientes.controlador.php";
 require_once "controllers/empresaController.php";
+require_once "controllers/trabajadorController.php";
+require_once "controllers/autoController.php";
+
 
 require_once "models/usuarioModel.php";
 require_once "models/clienteModel.php";
@@ -31,6 +34,8 @@ require_once "models/productos.modelo.php";
 require_once "models/clientes.modelo.php";
 require_once "models/ordenPedidoModel.php";
 require_once "models/empresaModel.php";
+require_once "models/trabajadorModel.php";
+require_once "models/autoModel.php";
 
 $plantilla = new ControladorPlantilla();
 $plantilla->ctrPlantilla();

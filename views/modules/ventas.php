@@ -14,7 +14,7 @@
         <!-- Default box -->
         <div class="box">
             <div class="box-header with-border">
-                <a href="crearventa">
+                <a href="crear-venta">
                     <button class="btn btn-primary">
                         Realizar Venta
                     </button>
@@ -25,12 +25,13 @@
                     <thead>
                         <tr>
                             <th>Código</th>
+                            <th>Comprobante</th>
                             <th>Usuario</th>
                             <th>Cliente</th>
                             <th>Fecha E</th>
                             <th>Fecha C</th>
-                            <th>Comprobante</th>
                             <th>Método Pago</th>
+                            <th>Total</th>
                             <th>Detalle</th>
                         </tr>
                     </thead>
@@ -42,16 +43,49 @@
 
                         foreach ($ventas as $value) {
                             echo '
-                            <tr>
-                                <td>'.$value["idventa"].'</td>
-                                <td>'.$value["idusuario"].'</td>
-                                <td>'.$value["idcliente"].'</td>
-                                <td>'.$value["fechaemision"].'</td>
-                                <td>'.$value["fechacancelacion"].'</td>
-                                <td>'.$value["comprobante"].'</td>
-                                <td>'.$value["metpago"].'</td>
+                            <tr>';
+                            $valorVenta= $value["codecomprobante"];
+
+                            for ($i=0; $i <= strlen($valorVenta); $i++) { 
+                                if (is_numeric($valorVenta[$i]))
+                               {
+                                  $valor = $i;
+                                  break;
+                               }
+                            }
+                             
+                            
+                            $nroDocum = substr($valorVenta,$valor);
+
+                            if ($nroDocum < 10) {
+                                $nroDocum = "000" . $nroDocum;
+                              } else if ($nroDocum < 100) {
+                                $nroDocum = "00" . $nroDocum;
+                              } else if ($nroDocum < 1000) {
+                                $nroDocum = "0" . $nroDocum;
+                               } else {
+                                $nroDocum = $nroDocum;
+                              }
+
+
+                            echo '  <td>' .  $nroDocum . '</td>
+                            <td>' . $value["comprobante"] . '</td>';
+
+                            $itemUsuario = "idusuario";
+                            $valorUsuario = $value["idusuario"];
+                            $respuestaUsuario = UsuarioController::MostrarUsuarios($itemUsuario, $valorUsuario);
+                            echo '   <td>' . $respuestaUsuario["nombres"] . '</td>';
+                            $itemCliente = "idcliente";
+                            $valorCliente = $value["idcliente"];
+                            $respuestaCliente = ControladorClientes::ctrMostrarClientes($itemCliente, $valorCliente);
+                            echo '<td>' . $respuestaCliente["razonsocial"] . '</td>
+                                <td>' . $value["fechaemision"] . '</td>
+                                <td>' . $value["fechacancelacion"] . '</td>
+                                
+                                <td>' . $value["metpago"] . '</td>
+                                <td>S/' . $value["total"] . '</td>
                                 <td class="text-center">
-                                    <button class="btn btn-success DetalleVenta" data-toggle="modal" data-target="#DetalleVenta" idventa="'.$value["idventa"].'" ><i class="fa fa-file-text-o" aria-hidden="true"></i></button>
+                                    <button class="btn btn-success DetalleVenta" data-toggle="modal" data-target="#DetalleVenta" idventa="' . $value["idventa"] . '" ><i class="fa fa-file-text-o" aria-hidden="true"></i></button>
                                 </td>
                             </tr>';
                         }
@@ -108,16 +142,15 @@
                 </div>
             </form>
             <?php
-                // $showDetalle = new VentasController();
-                // $showDetalle->mostrarDetalleVenta();
+            // $showDetalle = new VentasController();
+            // $showDetalle->mostrarDetalleVenta();
             ?>
         </div>
     </div>
 </div>
 
 <!-- AGREGAR VENTA -->
-<div class="modal fade" id="modalAgregarCliente" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-    aria-hidden="true">
+<div class="modal fade" id="modalAgregarCliente" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog " role="document">
         <div class="modal-content">
             <form role="form" method="post">
@@ -134,8 +167,7 @@
                             <span class="input-group-text" id="basic-addon1">
                                 <i class="fa fa-address-card" aria-hidden="true"></i>
                             </span>
-                            <input type="text" class="form-control" aria-label="Username"
-                                aria-describedby="basic-addon1" name="ruc" placeholder="Código de Venta" required>
+                            <input type="text" class="form-control" aria-label="Username" aria-describedby="basic-addon1" name="ruc" placeholder="Código de Venta" required>
                         </div>
 
                         <!-- ENTRADA PARA EL IDCLIENTE -->
@@ -143,14 +175,12 @@
                             <span class="input-group-text" id="basic-addon1">
                                 <i class="fa fa-address-card" aria-hidden="true"></i>
                             </span>
-                            <input type="text" class="form-control" aria-label="Username"
-                                aria-describedby="basic-addon1" name="ruc" placeholder="Código de Cliente" required>
+                            <input type="text" class="form-control" aria-label="Username" aria-describedby="basic-addon1" name="ruc" placeholder="Código de Cliente" required>
                         </div>
 
                         <!-- ENTRADA PARA SELECCIONAR ARTICULO -->
                         <div class="input-group mb-3">
-                            <span class="input-group-text" id="basic-addon1"><i class="fa fa-th"
-                                    aria-hidden="true"></i></span>
+                            <span class="input-group-text" id="basic-addon1"><i class="fa fa-th" aria-hidden="true"></i></span>
                             <select class="form-control input-lg" name="categoria">
                                 <option value="" selected disabled>Selecionar Articulo</option>
                                 <?php
@@ -160,7 +190,7 @@
                                 $articulos = ControladorArticulos::ctrMostrarArticulo($item, $valor);
 
                                 foreach ($articulos as $key => $value) {
-                                    echo '<option value="'.$value["idarticulo"].'">' . $value["descripcion"] . ' - Precio: '. $value["precioventa"] . '</option>';
+                                    echo '<option value="' . $value["idarticulo"] . '">' . $value["descripcion"] . ' - Precio: ' . $value["precioventa"] . '</option>';
                                 }
                                 ?>
                             </select>
@@ -168,10 +198,8 @@
 
                         <!-- ENTRADA PARA CANTIDAD -->
                         <div class="input-group mb-3">
-                            <span class="input-group-text" id="basic-addon1"><i class="fa fa-check"
-                                    aria-hidden="true"></i></span>
-                            <input type="number" min="0" class="form-control" aria-label="Username"
-                                aria-describedby="basic-addon1" name="cantidad" placeholder="Ingresar cantidad">
+                            <span class="input-group-text" id="basic-addon1"><i class="fa fa-check" aria-hidden="true"></i></span>
+                            <input type="number" min="0" class="form-control" aria-label="Username" aria-describedby="basic-addon1" name="cantidad" placeholder="Ingresar cantidad">
                         </div>
 
                         <!-- ENTRADA PARA FECHA EMISIÓN -->
@@ -180,8 +208,7 @@
                             <span class="input-group-text" id="basic-addon1">
                                 <i class="fas fa-user-friends"></i>
                             </span>
-                            <input type="datetime-local" class="form-control" aria-label="Username"
-                                aria-describedby="basic-addon1" name="razonS" required>
+                            <input type="datetime-local" class="form-control" aria-label="Username" aria-describedby="basic-addon1" name="razonS" required>
                         </div>
 
                         <!-- ENTRADA PARA FECHA CANCELACIÓN -->
@@ -190,8 +217,7 @@
                             <span class="input-group-text" id="basic-addon1">
                                 <i class="fas fa-user-friends"></i>
                             </span>
-                            <input type="datetime-local" class="form-control" aria-label="Username"
-                                aria-describedby="basic-addon1" name="razonS" required>
+                            <input type="datetime-local" class="form-control" aria-label="Username" aria-describedby="basic-addon1" name="razonS" required>
                         </div>
                     </div>
                 </div>
@@ -201,7 +227,7 @@
                 </div>
             </form>
             <?php
-                
+
             ?>
         </div>
     </div>

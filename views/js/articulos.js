@@ -59,14 +59,15 @@ $(".table tbody").on("click", "button.EditarArticulo", function() {
         processData: false,
         dataType: "json",
         success: function(respuesta) {
-            $("#idArticulo").val(respuesta["idarticulo"]);
-            $("#idtipo").val(respuesta["idtipo"]);
-            $("#idtipo").html(respuesta["tipoArt"]);
-            $("#editarUnidad").html(respuesta["unidad"]);
-            $("#editarUnidad").html(respuesta["unidad"]);
-            $("#descripcion").val(respuesta["descripcion"]);
-            $("#cantidad").val(respuesta["cantidad"]);
-            $("#pVenta").val(respuesta["precioventa"]);
+            console.log(respuesta[0]["idarticulo"]);
+            $("#idArticulo").val(respuesta[0]["idarticulo"]);
+            $("#idtipo").val(respuesta[0]["idtipo"]);
+            $("#idtipo").html(respuesta[0]["tipo"]);
+            $("#editarUnidad").html(respuesta[0]["unidad"]);
+            $("#editarUnidad").html(respuesta[0]["unidad"]);
+            $("#descripcion").val(respuesta[0]["descripcion"]);
+            $("#cantidad").val(respuesta[0]["cantidad"]);
+            $("#pVenta").val(respuesta[0]["precioventa"]);
         }
     })
 })
